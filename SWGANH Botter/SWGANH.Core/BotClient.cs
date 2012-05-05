@@ -9,18 +9,25 @@ namespace SWGANH.Core
     public enum BotStatus
     {
         Disconnected,
-        Connecting,
-        Connected,
-        Disconnecting
+        LoggedIn,
+        CharacterSelect,
+        Zoning,
+        InGame
     }
-
-    public class BotClient
+    public class BotClient : IDisposable
     {
+        public BotClient(int localPort)
+        {
+            Session = new Session(localPort);
+        }
         public BotClient()
         {
-            Session = new Session();
+            Session = new Session(44499);
         }
+
         public string Name { get; set; }
+
+        public float Speed { get; set; }
 
         public Vec3 Position { get; set; }
 
@@ -28,15 +35,9 @@ namespace SWGANH.Core
 
         public Session Session { get; set; }
 
-        public BotStatus ConnectionStatus { get; set; }
-
-        public void Connect(EndPoint remoteEndpoint)
+        public void Dispose()
         {
-            Session.NetworkEndpoint = remoteEndpoint;
-            if (Session.Connect())
-                ConnectionStatus = BotStatus.Connecting;
-            else
-                ConnectionStatus = BotStatus.Disconnected;
+            Session.Disconnect();
         }
     }
 }

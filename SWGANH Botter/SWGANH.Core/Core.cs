@@ -37,6 +37,8 @@ namespace SWGANH.Core
         {
             // Connect to current server
             client.Session.Connect(ConnectionServerEndpoint);
+            
+            // TODO: Send Basic Login Message
             byte[] loginData = new byte[1024];
             client.Session.SendAsync(loginData);
         }

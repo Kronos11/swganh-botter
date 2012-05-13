@@ -77,10 +77,10 @@ namespace SWGANH.Core.Tests
             
         }
         [TestMethod]
-        public async void CanSendMessageAsync()
+        public void CanSendMessageAsync()
         {
             UdpClient udpServer = new UdpClient(44453);
-            UdpReceiveResult result = await udpServer.ReceiveAsync();
+            Task<UdpReceiveResult> result = udpServer.ReceiveAsync();
 
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 44453);
             using (BotClient client = new BotClient())
@@ -90,7 +90,7 @@ namespace SWGANH.Core.Tests
 
                 client.Session.SendAsync(message);
 
-                Assert.AreEqual<string>("Test Message", Encoding.ASCII.GetString(result.Buffer));
+                Assert.AreEqual<string>("Test Message", Encoding.ASCII.GetString(result.Result.Buffer));
 
             }
             udpServer.Close();
